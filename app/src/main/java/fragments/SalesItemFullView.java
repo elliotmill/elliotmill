@@ -1,14 +1,12 @@
 package fragments;
 
 import android.content.Context;
-import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
-import android.support.v7.widget.LinearLayoutManager;
-import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.android.elliotmiller.week2appem1974.R;
@@ -20,34 +18,33 @@ import data.Store;
 /**
  * A simple {@link Fragment} subclass.
  * Activities that contain this fragment must implement the
- * {@link SalesItems.SalesItemsListener} interface
+ * {@link SalesItemFullView.SalesItemFullViewInterface} interface
  * to handle interaction events.
- * Use the {@link SalesItems#newInstance} factory method to
+ * Use the {@link SalesItemFullView#newInstance} factory method to
  * create an instance of this fragment.
  */
-public class SalesItems extends Fragment {
-    // TODO: Rename parameter arguments, choose names that match
-    private RecyclerView recyclerView;
+public class SalesItemFullView extends Fragment {
+    private static final String SALES_ITEM = "param1";
 
-    // TODO: Rename and change types of parameters
-    private String mParam1;
-    private String mParam2;
 
-    private SalesItems.SalesItemsListener salesItemsHandler;
+    private int salesItemId;
 
-    public SalesItems() {
+    private SalesItemFullViewInterface mListener;
+
+    public SalesItemFullView() {
         // Required empty public constructor
     }
 
     /**
      * Use this factory method to create a new instance of
      * this fragment using the provided parameters.
-     * @return A new instance of fragment SalesItemsAdapter.
+     *@param salesId Id of the sales item (cookie in this case)
+     * @return A new instance of fragment SalesItemFullView.
      */
-    // TODO: Rename and change types and number of parameters
-    public static SalesItems newInstance() {
-        SalesItems fragment = new SalesItems();
+    public static SalesItemFullView newInstance(int salesId) {
+        SalesItemFullView fragment = new SalesItemFullView();
         Bundle args = new Bundle();
+        args.putInt(SALES_ITEM, salesId);
         fragment.setArguments(args);
         return fragment;
     }
@@ -55,28 +52,36 @@ public class SalesItems extends Fragment {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        if (getArguments() != null) {
+            this.salesItemId = getArguments().getInt(SALES_ITEM);
+        }
     }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        SalesItem[] salesItems = Store.getSalesItems();
-        View root = inflater.inflate(R.layout.sales_items, container, false);
-        ((TextView)root.findViewById(R.id.title)).setText(salesItems.length + " Cookies Available");
-        recyclerView = (RecyclerView)root.findViewById(R.id.rv_sales_items);
-        recyclerView.setHasFixedSize(true);
-        recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
-        recyclerView.setAdapter(new SalesItemsAdapter(getContext(), salesItems, this.salesItemsHandler));
+        final SalesItem[] salesItems = Store.getSalesItems();
+        View root = inflater.inflate(R.layout.sales_item_full_view, container, false);
+        ((ImageView)root.findViewById(R.id.iv_salesItem)).setImageDrawable(
+                getContext().getResources().getDrawable(SalesItemsAdapter.getCookieDrawableFromId(this.salesItemId))
+        );
+        ((TextView)root.findViewById(R.id.tv_title)).setText(salesItems[this.salesItemId].getItemName());
+        ((TextView)root.findViewById(R.id.tv_description)).setText(salesItems[this.salesItemId].getItemDescription());
+        root.findViewById(R.id.btn_purchase).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                mListener.addToCart(SalesItemFullView.this.salesItemId);
+            }
+        });
         return root;
     }
-
 
     @Override
     public void onAttach(Context context) {
         super.onAttach(context);
-        if (context instanceof SalesItemsListener) {
-            this.salesItemsHandler = (SalesItemsListener) context;
+        if (context instanceof SalesItemFullViewInterface) {
+            mListener = (SalesItemFullViewInterface) context;
         } else {
             throw new RuntimeException(context.toString()
                     + " must implement OnFragmentInteractionListener");
@@ -86,7 +91,7 @@ public class SalesItems extends Fragment {
     @Override
     public void onDetach() {
         super.onDetach();
-        this.salesItemsHandler = null;
+        mListener = null;
     }
 
     /**
@@ -99,7 +104,7 @@ public class SalesItems extends Fragment {
      * "http://developer.android.com/training/basics/fragments/communicating.html"
      * >Communicating with Other Fragments</a> for more information.
      */
-    public interface SalesItemsListener {
-        void selectItem(int id);
+    public interface SalesItemFullViewInterface {
+        void addToCart(int itemId);
     }
 }

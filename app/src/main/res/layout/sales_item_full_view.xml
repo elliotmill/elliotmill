@@ -1,0 +1,37 @@
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:padding="10dp"
+    tools:context="fragments.SalesItemFullView">
+    <ImageView
+        android:id="@+id/iv_salesItem"
+        android:layout_width="match_parent"
+        android:layout_height="150dp"
+        android:background="@drawable/chocolate_chip_cookie"
+        android:scaleType="fitXY"/>
+    <TextView
+        android:id="@+id/tv_title"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Cookie Title"
+        android:textSize="24sp"
+        android:textAlignment="center"
+        android:textColor="@color/colorPrimary"/>
+    <TextView
+        android:id="@+id/tv_description"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="10"
+        android:minLines="10"
+        android:textSize="18sp"
+        android:text="Chocolate Chip say Filled with Chocolate chips and a price tag of 2$"/>
+    <Button
+        android:id="@+id/btn_purchase"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:textAlignment="center"
+        android:text="Add To Cart"/>
+
+</LinearLayout>

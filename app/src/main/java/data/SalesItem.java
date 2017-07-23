@@ -9,9 +9,12 @@ public class SalesItem {
     private String itemName;
     private String itemPrice;
     private String itemIconUrl;
+    private String itemDescription;
 
-    public SalesItem(String nm, String price, String iconUrl) {
+
+    public SalesItem(String nm, String price, String iconUrl, String iDesc) {
         this.itemName = nm;
+        this.itemDescription = iDesc;
         this.itemPrice = price;
         this.itemIconUrl = iconUrl;
     }
@@ -28,14 +31,8 @@ public class SalesItem {
         return this.itemIconUrl;
     }
 
-    public static SalesItem[] getSalesItems() {
-        return new SalesItem[]{
-                new SalesItem("Chocolate Chip Cookies", "2$", "dummyUrl"),
-                new SalesItem("Sugar Cookies", "2$", "dummyUrl"),
-                new SalesItem("M&M Cookies", "2$", "dummyUrl"),
-                new SalesItem("Oatmeal Raisin Cookies", "2$", "dummyUrl"),
-                new SalesItem("Snicker Doodle Cookies", "2$", "dummyUrl"),
-                new SalesItem("White Chocolate Cookies", "2$", "dummyUrl")
-        };
+    public String getItemDescription() {
+        return this.itemDescription;
     }
+
 }

@@ -5,9 +5,11 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.widget.Toast;
 
+import fragments.SalesItemFullView;
 import fragments.SalesItems;
 
-public class MainActivity extends AppCompatActivity implements SalesItems.SalesItemsListener {
+public class MainActivity extends AppCompatActivity implements
+        SalesItems.SalesItemsListener, SalesItemFullView.SalesItemFullViewInterface {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -22,6 +24,14 @@ public class MainActivity extends AppCompatActivity implements SalesItems.SalesI
 
     @Override
     public void selectItem(int id) {
-        Toast.makeText(this, "You have selected item " + id, Toast.LENGTH_SHORT).show();
+        FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
+        ft.replace(R.id.fragment_holder, SalesItemFullView.newInstance(id));
+        ft.addToBackStack(null);
+        ft.commit();
+    }
+
+    @Override
+    public void addToCart(int itemId) {
+        Toast.makeText(this, "Add Item " + itemId + " to cart", Toast.LENGTH_SHORT).show();
     }
 }

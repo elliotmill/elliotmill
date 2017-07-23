@@ -42,13 +42,13 @@ public class SalesItemsAdapter extends RecyclerView.Adapter<SalesItemsAdapter.Vi
         SalesItem item = this.salesItems[position];
         holder.ivIcon.setImageDrawable(
                 this.context.getResources().getDrawable(
-                        this.getCookieDrawableFromId(position)
+                        getCookieDrawableFromId(position)
                 )
         );
         holder.tvName.setText(item.getItemName());
     }
 
-    private int getCookieDrawableFromId(int position) {
+    public static int getCookieDrawableFromId(int position) {
         switch (position) {
             case 0: {
                 return R.drawable.chocolate_chip_cookie;
